@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8b10425962fa404d91cdfb17ed6f2da7" Name="Diagram1">
+        <EntityTypeShape EntityType="Movie.dboModel.Actor" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.MovieActor" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.MovieBooking" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.Movy" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.sysdiagram" Width="1.5" PointX="5.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.Theater" Width="1.5" PointX="2.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.User" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.vMovieActor" Width="1.5" PointX="5.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.vMovieBook" Width="1.5" PointX="4.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Movie.dboModel.vMovieDetail" Width="1.5" PointX="6.75" PointY="8.125" IsExpanded="true" />
+        <AssociationConnector Association="Movie.dboModel.FK_MovieActors_Actors" ManuallyRouted="false" />
+        <AssociationConnector Association="Movie.dboModel.FK_MovieActors_Movies" ManuallyRouted="false" />
+        <AssociationConnector Association="Movie.dboModel.FK_MovieBookins_Movies" ManuallyRouted="false" />
+        <AssociationConnector Association="Movie.dboModel.FK_MovieBookins_Users" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

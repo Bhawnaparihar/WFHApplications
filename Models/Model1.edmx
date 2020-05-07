@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Movie.dboModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Actors">
+          <Key>
+            <PropertyRef Name="ActorId" />
+          </Key>
+          <Property Name="ActorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActorName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Country" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Age" Type="int" />
+        </EntityType>
+        <EntityType Name="MovieActors">
+          <Key>
+            <PropertyRef Name="MovieActorId" />
+          </Key>
+          <Property Name="MovieActorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieId" Type="int" Nullable="false" />
+          <Property Name="ActorId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MovieBookings">
+          <Key>
+            <PropertyRef Name="MovieBookingId" />
+          </Key>
+          <Property Name="MovieBookingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="TheaterId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Movies">
+          <Key>
+            <PropertyRef Name="MovieId" />
+          </Key>
+          <Property Name="MovieId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Rating" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Favourite" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Theaters">
+          <Key>
+            <PropertyRef Name="TheaterId" />
+          </Key>
+          <Property Name="TheaterId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShowTime" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="Price" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MobileNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Movie.dbo.dbo.vMovieActor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vMovieActor">
+          <Key>
+            <PropertyRef Name="MovieName" />
+            <PropertyRef Name="ActorName" />
+          </Key>
+          <Property Name="MovieName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ActorName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Movie.dbo.dbo.vMovieBook' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vMovieBook">
+          <Key>
+            <PropertyRef Name="MovieName" />
+            <PropertyRef Name="ShowTime" />
+            <PropertyRef Name="Price" />
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="MovieName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ShowTime" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="Price" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Movie.dbo.dbo.vMovieDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vMovieDetails">
+          <Key>
+            <PropertyRef Name="MovieName" />
+            <PropertyRef Name="MovieId" />
+            <PropertyRef Name="ActorId" />
+            <PropertyRef Name="ActorName" />
+            <PropertyRef Name="Rating" />
+            <PropertyRef Name="Country" />
+          </Key>
+          <Property Name="MovieName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MovieId" Type="int" Nullable="false" />
+          <Property Name="ActorId" Type="int" Nullable="false" />
+          <Property Name="ActorName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Rating" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Country" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Favourite" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_MovieActors_Actors">
+          <End Role="Actors" Type="Self.Actors" Multiplicity="1" />
+          <End Role="MovieActors" Type="Self.MovieActors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Actors">
+              <PropertyRef Name="ActorId" />
+            </Principal>
+            <Dependent Role="MovieActors">
+              <PropertyRef Name="ActorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieActors_Movies">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="1" />
+          <End Role="MovieActors" Type="Self.MovieActors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieId" />
+            </Principal>
+            <Dependent Role="MovieActors">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieBookins_Movies">
+          <End Role="Movies" Type="Self.Movies" Multiplicity="1" />
+          <End Role="MovieBookings" Type="Self.MovieBookings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieId" />
+            </Principal>
+            <Dependent Role="MovieBookings">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieBookins_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="MovieBookings" Type="Self.MovieBookings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="MovieBookings">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MoviedboModelStoreContainer">
+          <EntitySet Name="Actors" EntityType="Self.Actors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MovieActors" EntityType="Self.MovieActors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MovieBookings" EntityType="Self.MovieBookings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Movies" EntityType="Self.Movies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Theaters" EntityType="Self.Theaters" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vMovieActor" EntityType="Self.vMovieActor" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vMovieActor].[MovieName] AS [MovieName], 
+    [vMovieActor].[ActorName] AS [ActorName]
+    FROM [dbo].[vMovieActor] AS [vMovieActor]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vMovieBook" EntityType="Self.vMovieBook" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vMovieBook].[MovieName] AS [MovieName], 
+    [vMovieBook].[ShowTime] AS [ShowTime], 
+    [vMovieBook].[Price] AS [Price], 
+    [vMovieBook].[UserName] AS [UserName]
+    FROM [dbo].[vMovieBook] AS [vMovieBook]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vMovieDetails" EntityType="Self.vMovieDetails" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vMovieDetails].[MovieName] AS [MovieName], 
+    [vMovieDetails].[MovieId] AS [MovieId], 
+    [vMovieDetails].[ActorId] AS [ActorId], 
+    [vMovieDetails].[ActorName] AS [ActorName], 
+    [vMovieDetails].[Rating] AS [Rating], 
+    [vMovieDetails].[Country] AS [Country], 
+    [vMovieDetails].[Favourite] AS [Favourite]
+    FROM [dbo].[vMovieDetails] AS [vMovieDetails]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_MovieActors_Actors" Association="Self.FK_MovieActors_Actors">
+            <End Role="Actors" EntitySet="Actors" />
+            <End Role="MovieActors" EntitySet="MovieActors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieActors_Movies" Association="Self.FK_MovieActors_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="MovieActors" EntitySet="MovieActors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieBookins_Movies" Association="Self.FK_MovieBookins_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="MovieBookings" EntitySet="MovieBookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieBookins_Users" Association="Self.FK_MovieBookins_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="MovieBookings" EntitySet="MovieBookings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Movie.dboModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Actor">
+          <Key>
+            <PropertyRef Name="ActorId" />
+          </Key>
+          <Property Name="ActorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Age" Type="Int32" />
+          <NavigationProperty Name="MovieActors" Relationship="Self.FK_MovieActors_Actors" FromRole="Actors" ToRole="MovieActors" />
+        </EntityType>
+        <EntityType Name="MovieActor">
+          <Key>
+            <PropertyRef Name="MovieActorId" />
+          </Key>
+          <Property Name="MovieActorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MovieId" Type="Int32" Nullable="false" />
+          <Property Name="ActorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Actor" Relationship="Self.FK_MovieActors_Actors" FromRole="MovieActors" ToRole="Actors" />
+          <NavigationProperty Name="Movy" Relationship="Self.FK_MovieActors_Movies" FromRole="MovieActors" ToRole="Movies" />
+        </EntityType>
+        <EntityType Name="MovieBooking">
+          <Key>
+            <PropertyRef Name="MovieBookingId" />
+          </Key>
+          <Property Name="MovieBookingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MovieId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="TheaterId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Movy" Relationship="Self.FK_MovieBookins_Movies" FromRole="MovieBookings" ToRole="Movies" />
+          <NavigationProperty Name="User" Relationship="Self.FK_MovieBookins_Users" FromRole="MovieBookings" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Movy">
+          <Key>
+            <PropertyRef Name="MovieId" />
+          </Key>
+          <Property Name="MovieId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MovieName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Rating" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Favourite" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MovieActors" Relationship="Self.FK_MovieActors_Movies" FromRole="Movies" ToRole="MovieActors" />
+          <NavigationProperty Name="MovieBookings" Relationship="Self.FK_MovieBookins_Movies" FromRole="Movies" ToRole="MovieBookings" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Theater">
+          <Key>
+            <PropertyRef Name="TheaterId" />
+          </Key>
+          <Property Name="TheaterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShowTime" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MobileNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="MovieBookings" Relationship="Self.FK_MovieBookins_Users" FromRole="Users" ToRole="MovieBookings" />
+        </EntityType>
+        <EntityType Name="vMovieActor">
+          <Key>
+            <PropertyRef Name="MovieName" />
+            <PropertyRef Name="ActorName" />
+          </Key>
+          <Property Name="MovieName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ActorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="vMovieBook">
+          <Key>
+            <PropertyRef Name="MovieName" />
+            <PropertyRef Name="ShowTime" />
+            <PropertyRef Name="Price" />
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="MovieName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ShowTime" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="vMovieDetail">
+          <Key>
+            <PropertyRef Name="MovieName" />
+            <PropertyRef Name="MovieId" />
+            <PropertyRef Name="ActorId" />
+            <PropertyRef Name="ActorName" />
+            <PropertyRef Name="Rating" />
+            <PropertyRef Name="Country" />
+          </Key>
+          <Property Name="MovieName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MovieId" Type="Int32" Nullable="false" />
+          <Property Name="ActorId" Type="Int32" Nullable="false" />
+          <Property Name="ActorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Rating" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Favourite" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_MovieActors_Actors">
+          <End Role="Actors" Type="Self.Actor" Multiplicity="1" />
+          <End Role="MovieActors" Type="Self.MovieActor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Actors">
+              <PropertyRef Name="ActorId" />
+            </Principal>
+            <Dependent Role="MovieActors">
+              <PropertyRef Name="ActorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieActors_Movies">
+          <End Role="Movies" Type="Self.Movy" Multiplicity="1" />
+          <End Role="MovieActors" Type="Self.MovieActor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieId" />
+            </Principal>
+            <Dependent Role="MovieActors">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieBookins_Movies">
+          <End Role="Movies" Type="Self.Movy" Multiplicity="1" />
+          <End Role="MovieBookings" Type="Self.MovieBooking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movies">
+              <PropertyRef Name="MovieId" />
+            </Principal>
+            <Dependent Role="MovieBookings">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieBookins_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="MovieBookings" Type="Self.MovieBooking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="MovieBookings">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities7" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Actors" EntityType="Self.Actor" />
+          <EntitySet Name="MovieActors" EntityType="Self.MovieActor" />
+          <EntitySet Name="MovieBookings" EntityType="Self.MovieBooking" />
+          <EntitySet Name="Movies" EntityType="Self.Movy" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Theaters" EntityType="Self.Theater" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="vMovieActors" EntityType="Self.vMovieActor" />
+          <EntitySet Name="vMovieBooks" EntityType="Self.vMovieBook" />
+          <EntitySet Name="vMovieDetails" EntityType="Self.vMovieDetail" />
+          <AssociationSet Name="FK_MovieActors_Actors" Association="Self.FK_MovieActors_Actors">
+            <End Role="Actors" EntitySet="Actors" />
+            <End Role="MovieActors" EntitySet="MovieActors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieActors_Movies" Association="Self.FK_MovieActors_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="MovieActors" EntitySet="MovieActors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieBookins_Movies" Association="Self.FK_MovieBookins_Movies">
+            <End Role="Movies" EntitySet="Movies" />
+            <End Role="MovieBookings" EntitySet="MovieBookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieBookins_Users" Association="Self.FK_MovieBookins_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="MovieBookings" EntitySet="MovieBookings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MoviedboModelStoreContainer" CdmEntityContainer="Entities7">
+          <EntitySetMapping Name="Actors">
+            <EntityTypeMapping TypeName="Movie.dboModel.Actor">
+              <MappingFragment StoreEntitySet="Actors">
+                <ScalarProperty Name="ActorId" ColumnName="ActorId" />
+                <ScalarProperty Name="ActorName" ColumnName="ActorName" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MovieActors">
+            <EntityTypeMapping TypeName="Movie.dboModel.MovieActor">
+              <MappingFragment StoreEntitySet="MovieActors">
+                <ScalarProperty Name="MovieActorId" ColumnName="MovieActorId" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="ActorId" ColumnName="ActorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MovieBookings">
+            <EntityTypeMapping TypeName="Movie.dboModel.MovieBooking">
+              <MappingFragment StoreEntitySet="MovieBookings">
+                <ScalarProperty Name="MovieBookingId" ColumnName="MovieBookingId" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="TheaterId" ColumnName="TheaterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Movies">
+            <EntityTypeMapping TypeName="Movie.dboModel.Movy">
+              <MappingFragment StoreEntitySet="Movies">
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="MovieName" ColumnName="MovieName" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Favourite" ColumnName="Favourite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Movie.dboModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Theaters">
+            <EntityTypeMapping TypeName="Movie.dboModel.Theater">
+              <MappingFragment StoreEntitySet="Theaters">
+                <ScalarProperty Name="TheaterId" ColumnName="TheaterId" />
+                <ScalarProperty Name="ShowTime" ColumnName="ShowTime" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Movie.dboModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vMovieActors">
+            <EntityTypeMapping TypeName="Movie.dboModel.vMovieActor">
+              <MappingFragment StoreEntitySet="vMovieActor">
+                <ScalarProperty Name="MovieName" ColumnName="MovieName" />
+                <ScalarProperty Name="ActorName" ColumnName="ActorName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vMovieBooks">
+            <EntityTypeMapping TypeName="Movie.dboModel.vMovieBook">
+              <MappingFragment StoreEntitySet="vMovieBook">
+                <ScalarProperty Name="MovieName" ColumnName="MovieName" />
+                <ScalarProperty Name="ShowTime" ColumnName="ShowTime" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vMovieDetails">
+            <EntityTypeMapping TypeName="Movie.dboModel.vMovieDetail">
+              <MappingFragment StoreEntitySet="vMovieDetails">
+                <ScalarProperty Name="MovieName" ColumnName="MovieName" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="ActorId" ColumnName="ActorId" />
+                <ScalarProperty Name="ActorName" ColumnName="ActorName" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Favourite" ColumnName="Favourite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
