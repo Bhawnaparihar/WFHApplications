@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [Movie.dbo]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  Database [Movie.dbo]    Script Date: 5/7/2020 6:53:30 PM ******/
 CREATE DATABASE [Movie.dbo]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -75,7 +75,7 @@ ALTER DATABASE [Movie.dbo] SET DELAYED_DURABILITY = DISABLED
 GO
 USE [Movie.dbo]
 GO
-/****** Object:  Table [dbo].[Actors]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  Table [dbo].[Actors]    Script Date: 5/7/2020 6:53:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -96,7 +96,7 @@ CREATE TABLE [dbo].[Actors](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[MovieActors]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  Table [dbo].[MovieActors]    Script Date: 5/7/2020 6:53:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -112,7 +112,7 @@ CREATE TABLE [dbo].[MovieActors](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[MovieBookings]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  Table [dbo].[MovieBookings]    Script Date: 5/7/2020 6:53:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -120,18 +120,16 @@ GO
 CREATE TABLE [dbo].[MovieBookings](
 	[MovieBookingId] [int] IDENTITY(1,1) NOT NULL,
 	[MovieId] [int] NOT NULL,
-	[ShowTime] [datetimeoffset](7) NOT NULL,
-	[Price] [int] NOT NULL,
 	[UserId] [int] NOT NULL,
-	[BookedSheet] [int] NOT NULL,
- CONSTRAINT [PK_MovieBookings] PRIMARY KEY CLUSTERED 
+	[TheaterId] [int] NOT NULL,
+ CONSTRAINT [PK_MovieBookins] PRIMARY KEY CLUSTERED 
 (
 	[MovieBookingId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Movies]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  Table [dbo].[Movies]    Script Date: 5/7/2020 6:53:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -152,7 +150,23 @@ CREATE TABLE [dbo].[Movies](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  Table [dbo].[Theaters]    Script Date: 5/7/2020 6:53:31 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Theaters](
+	[TheaterId] [int] IDENTITY(1,1) NOT NULL,
+	[ShowTime] [datetimeoffset](7) NOT NULL,
+	[Price] [int] NOT NULL,
+ CONSTRAINT [PK_Theaters] PRIMARY KEY CLUSTERED 
+(
+	[TheaterId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 5/7/2020 6:53:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -173,7 +187,7 @@ CREATE TABLE [dbo].[Users](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  View [dbo].[vMovieActor]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  View [dbo].[vMovieActor]    Script Date: 5/7/2020 6:53:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -185,20 +199,20 @@ FROM            dbo.Actors CROSS JOIN
                          dbo.Movies
 
 GO
-/****** Object:  View [dbo].[vMovieBook]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  View [dbo].[vMovieBook]    Script Date: 5/7/2020 6:53:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[vMovieBook]
 AS
-SELECT        dbo.Movies.MovieName, dbo.MovieBookings.ShowTime, dbo.MovieBookings.Price, dbo.MovieBookings.BookedSheet, dbo.Users.UserName
-FROM            dbo.MovieBookings INNER JOIN
-                         dbo.Movies ON dbo.MovieBookings.MovieId = dbo.Movies.MovieId INNER JOIN
-                         dbo.Users ON dbo.MovieBookings.UserId = dbo.Users.UserId
+SELECT        dbo.Movies.MovieName, dbo.Theaters.ShowTime, dbo.Theaters.Price, dbo.Users.UserName
+FROM            dbo.Movies INNER JOIN
+                         dbo.Theaters ON dbo.Movies.MovieId = dbo.Theaters.MovieId CROSS JOIN
+                         dbo.Users
 
 GO
-/****** Object:  View [dbo].[vMovieDetails]    Script Date: 5/6/2020 7:36:07 PM ******/
+/****** Object:  View [dbo].[vMovieDetails]    Script Date: 5/7/2020 6:53:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -222,15 +236,15 @@ REFERENCES [dbo].[Movies] ([MovieId])
 GO
 ALTER TABLE [dbo].[MovieActors] CHECK CONSTRAINT [FK_MovieActors_Movies]
 GO
-ALTER TABLE [dbo].[MovieBookings]  WITH CHECK ADD  CONSTRAINT [FK_MovieBookings_Movies] FOREIGN KEY([MovieId])
+ALTER TABLE [dbo].[MovieBookings]  WITH CHECK ADD  CONSTRAINT [FK_MovieBookins_Movies] FOREIGN KEY([MovieId])
 REFERENCES [dbo].[Movies] ([MovieId])
 GO
-ALTER TABLE [dbo].[MovieBookings] CHECK CONSTRAINT [FK_MovieBookings_Movies]
+ALTER TABLE [dbo].[MovieBookings] CHECK CONSTRAINT [FK_MovieBookins_Movies]
 GO
-ALTER TABLE [dbo].[MovieBookings]  WITH CHECK ADD  CONSTRAINT [FK_MovieBookings_Users] FOREIGN KEY([UserId])
+ALTER TABLE [dbo].[MovieBookings]  WITH CHECK ADD  CONSTRAINT [FK_MovieBookins_Users] FOREIGN KEY([UserId])
 REFERENCES [dbo].[Users] ([UserId])
 GO
-ALTER TABLE [dbo].[MovieBookings] CHECK CONSTRAINT [FK_MovieBookings_Users]
+ALTER TABLE [dbo].[MovieBookings] CHECK CONSTRAINT [FK_MovieBookins_Users]
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPane1', @value=N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
 Begin DesignProperties = 
@@ -424,32 +438,32 @@ Begin DesignProperties =
          Left = 0
       End
       Begin Tables = 
-         Begin Table = "MovieBookings"
-            Begin Extent = 
-               Top = 42
-               Left = 292
-               Bottom = 171
-               Right = 468
-            End
-            DisplayFlags = 280
-            TopColumn = 2
-         End
          Begin Table = "Movies"
             Begin Extent = 
-               Top = 0
-               Left = 553
-               Bottom = 129
-               Right = 723
+               Top = 6
+               Left = 38
+               Bottom = 135
+               Right = 208
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "Theaters"
+            Begin Extent = 
+               Top = 6
+               Left = 246
+               Bottom = 135
+               Right = 416
             End
             DisplayFlags = 280
             TopColumn = 0
          End
          Begin Table = "Users"
             Begin Extent = 
-               Top = 22
-               Left = 15
-               Bottom = 151
-               Right = 185
+               Top = 6
+               Left = 454
+               Bottom = 135
+               Right = 624
             End
             DisplayFlags = 280
             TopColumn = 0
